@@ -1,0 +1,41 @@
+#ifndef HEADER_H_
+#define HEADER_H_
+#include <stdio.h>
+#define NAME_LENGTH 10
+#define BLOCK_SIZE 2048
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
+#define ANSI_COLOR_CYAN    "\x1b[36m"
+#define ANSI_COLOR_WHITE  "\x1b[37m"
+
+struct VirtualDisk {
+	FILE* file;
+	unsigned int inodesAmount;
+	struct iNode *inodes;
+};
+
+struct SuperBlock {
+	size_t diskSize;
+};
+
+struct iNode {
+	char name[NAME_LENGTH];
+	unsigned int size;
+	unsigned int next;
+	unsigned int isFirstOfFile;
+	unsigned int used;
+};
+
+const char* DISK_NAME;
+struct VirtualDisk* createDisk(const size_t size);
+void deleteDisk();
+struct VirtualDisk* openDisk();
+void closeDisk (struct VirtualDisk * fs);
+int copyToDisk(struct VirtualDisk * fs,const char* driveFile, const char* diskFile);
+int copyFromDisk(struct VirtualDisk * fs,const char* source,const char* destination);
+int removeFileFromDisk(struct VirtualDisk* disk, const char* name);
+void listFiles(struct VirtualDisk * fs);
+void listBlocks (struct VirtualDisk *fs);
+
+#endif
+
